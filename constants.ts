@@ -217,7 +217,7 @@ export const QUESTION_DATABASE: Question[] = [
     question: "¿Dónde se encontraba el primer objeto en el concurso de La Serena?",
     options: ["En la playa", "En la Recova", "En una iglesia", "En el museo"],
     correctAnswer: 2,
-    explanation: "La primera pista los llevó a la Recova de La Serena."
+    explanation: "La primera pista los llevó al equipo hasta las campanas de una iglesia."
   },
   {
     id: 32,
