@@ -18,10 +18,20 @@ const GuessWhoGame: React.FC<GuessWhoProps> = ({ onBack, triggerWrongFeedback })
     }, []);
 
     const newGame = () => {
+        // 1. Seleccionar personaje objetivo aleatorio
         const randomChar = CHARACTER_PROFILES[Math.floor(Math.random() * CHARACTER_PROFILES.length)];
         setTargetChar(randomChar);
+        
+        // 2. Crear array de opciones: el correcto + 4 aleatorios
+        const otherChars = CHARACTER_PROFILES.filter(char => char.id !== randomChar.id);
+        const shuffledOthers = [...otherChars].sort(() => 0.5 - Math.random());
+        const selected4 = shuffledOthers.slice(0, 4);
+        
+        // 3. Combinar el correcto con los 4 aleatorios y mezclar
+        const finalOptions = [randomChar, ...selected4].sort(() => 0.5 - Math.random());
+        
+        setOptions(finalOptions);
         setRevealedTraits([0]); // Reveal first trait initially
-        setOptions(CHARACTER_PROFILES); // All chars are options
         setGameWon(false);
     };
 
@@ -76,7 +86,7 @@ const GuessWhoGame: React.FC<GuessWhoProps> = ({ onBack, triggerWrongFeedback })
                     )}
                 </div>
 
-                {/* Options Grid */}
+                {/* Options Grid - SOLO 5 OPCIONES */}
                 <div className="grid grid-cols-1 gap-3">
                     {gameWon ? (
                         <div className="bg-green-600/20 border border-green-500 p-8 rounded-2xl text-center animate-pop">
@@ -91,18 +101,23 @@ const GuessWhoGame: React.FC<GuessWhoProps> = ({ onBack, triggerWrongFeedback })
                             </button>
                         </div>
                     ) : (
-                        options.map(char => (
-                            <button
-                                key={char.id}
-                                onClick={() => handleGuess(char.id)}
-                                className="bg-white/5 hover:bg-mystery-accent/20 hover:border-mystery-accent border border-white/10 p-4 rounded-xl text-left transition-all flex items-center gap-4 group"
-                            >
-                                <div className="bg-black/30 p-2 rounded-full group-hover:bg-mystery-accent group-hover:text-white transition-colors">
-                                    <User size={20} />
-                                </div>
-                                <span className="font-bold text-lg">{char.name}</span>
-                            </button>
-                        ))
+                        <>
+                            <p className="text-gray-400 text-sm text-center mb-2">
+                                Selecciona quién crees que es:
+                            </p>
+                            {options.map(char => (
+                                <button
+                                    key={char.id}
+                                    onClick={() => handleGuess(char.id)}
+                                    className="bg-white/5 hover:bg-mystery-accent/20 hover:border-mystery-accent border border-white/10 p-4 rounded-xl text-left transition-all flex items-center gap-4 group"
+                                >
+                                    <div className="bg-black/30 p-2 rounded-full group-hover:bg-mystery-accent group-hover:text-white transition-colors">
+                                        <User size={20} />
+                                    </div>
+                                    <span className="font-bold text-lg">{char.name}</span>
+                                </button>
+                            ))}
+                        </>
                     )}
                 </div>
             </div>
